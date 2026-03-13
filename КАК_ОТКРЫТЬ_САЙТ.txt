@@ -1,0 +1,64 @@
+═══════════════════════════════════════════════════════════════
+  ИИС ППР — КАК ОТКРЫТЬ САЙТ НА КОМПЬЮТЕРЕ
+═══════════════════════════════════════════════════════════════
+
+Способ 1. Через XAMPP (рекомендуется)
+────────────────────────────────────
+1. Скачайте и установите XAMPP: https://www.apachefriends.org/ru/download.html
+2. Запустите XAMPP Control Panel → Start у Apache и MySQL.
+3. Скопируйте папку проекта в: C:\xampp\htdocs\
+   Итог: C:\xampp\htdocs\lab-project\ (все файлы в одной папке).
+
+4. Сделать корнем сайта папку lab-project:
+   - Откройте файл C:\xampp\apache\conf\extra\httpd-vhosts.conf в блокноте.
+   - В конец файла добавьте:
+
+     <VirtualHost *:80>
+         ServerName iis-ppr.local
+         DocumentRoot "C:/xampp/htdocs/lab-project"
+         <Directory "C:/xampp/htdocs/lab-project">
+             AllowOverride All
+             Require all granted
+         </Directory>
+     </VirtualHost>
+
+   - Сохраните файл. Перезапустите Apache в XAMPP.
+   - Откройте файл C:\Windows\System32\drivers\etc\hosts от имени администратора, добавьте строку:
+     127.0.0.1   iis-ppr.local
+   Сохраните.
+5. В браузере откройте: http://iis-ppr.local
+   Или: http://iis-ppr.local/login.php
+
+   Если виртуальный хост не настраивать — откройте: http://localhost/lab-project/login.php
+
+Способ 2. Встроенный PHP-сервер (если PHP уже установлен)
+─────────────────────────────────────────────────────────
+1. Откройте командную строку (Win+R → cmd → Enter).
+2. Перейдите в папку проекта:
+   cd C:\Users\taran\Documents\lab-project
+   (замените путь на тот, где у вас лежит проект)
+3. Выполните:
+   C:\xampp\php\php.exe -S localhost:8000
+   (если PHP стоит в XAMPP; иначе укажите полный путь к php.exe)
+4. В браузере откройте: http://localhost:8000/proverka.html
+   Затем: http://localhost:8000/login.php
+
+Способ 3. Скрипт run-server.bat
+──────────────────────────────
+1. Дважды щёлкните по файлу run-server.bat в папке проекта.
+2. Если в окне появилось сообщение "PHP не найден" — установите XAMPP (способ 1) и повторите.
+3. Если окно показывает "Запуск сервера: http://localhost:8000" — НЕ ЗАКРЫВАЙТЕ это окно.
+4. Откройте браузер и введите: http://localhost:8000/proverka.html
+   Потом: http://localhost:8000/login.php
+
+───────────────────────────────────────────────────────────────
+ВАЖНО
+───────────────────────────────────────────────────────────────
+• Сайт нельзя открывать двойным щелчком по index.php (путь file:///...). Нужен именно веб-сервер (Apache или php -S) и адрес http://localhost/...
+• Если порт 8000 занят: php -S localhost:8080 — тогда открывайте http://localhost:8080
+• Для входа после установки БД: выполните php update_admin_password.php (из папки проекта в консоли), затем логин: admin@iis.local, пароль: admin123
+
+Проверка:
+• http://localhost:8000/proverka.html — простая страница без PHP (проверка, что сервер отдаёт файлы)
+• http://localhost:8000/test-php.php — проверка, что PHP выполняется
+• http://localhost:8000/login.php — страница входа в систему
